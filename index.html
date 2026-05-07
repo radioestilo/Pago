@@ -3,127 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Pago Pro</title>
+    <title>Generador de Pago Móvil | FANTO</title>
     <style>
-        :root { --whatsapp: #128c7e; --business: #075e54; --accent: #007bff; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #f0f2f5; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        .card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 450px; margin-bottom: 20px; box-sizing: border-box; }
-        h2 { color: var(--business); margin: 0 0 20px; text-align: center; font-size: 1.4rem; }
-        label { display: block; margin: 12px 0 6px; font-weight: 600; font-size: 14px; color: #555; }
-        .input-group { display: flex; gap: 8px; }
-        input { flex-grow: 1; padding: 12px; border: 1.5px solid #e1e1e1; border-radius: 10px; font-size: 16px; outline: none; transition: border 0.3s; }
-        input:focus { border-color: var(--whatsapp); }
-        .btn-lupa { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 0 15px; cursor: pointer; font-size: 18px; }
-        .btn-enviar { width: 100%; padding: 15px; background-color: var(--whatsapp); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
-        .btn-enviar:active { transform: scale(0.98); background-color: var(--business); }
-        
-        .registro-container { width: 100%; max-width: 450px; background: white; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); box-sizing: border-box; }
-        .header-registro { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { text-align: left; padding: 10px; border-bottom: 2px solid #f0f0f0; color: #888; }
-        td { padding: 12px 10px; border-bottom: 1px solid #f9f9f9; color: #333; }
-        .btn-borrar { background: #ff4757; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 11px; }
+        :root {
+            --primary: #075e54;
+            --secondary: #128c7e;
+            --accent: #25d366;
+            --bg: #f0f2f5;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card {
+            background: var(--white);
+            width: 100%;
+            max-width: 450px;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid #e1e1e1;
+            border-radius: 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--secondary);
+        }
+
+        .phone-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-lupa {
+            background: #e8f0fe;
+            border: 1px solid #d2e3fc;
+            border-radius: 12px;
+            padding: 0 15px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background 0.2s;
+        }
+
+        .btn-lupa:active {
+            background: #d2e3fc;
+        }
+
+        .btn-enviar {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(18, 140, 126, 0.3);
+        }
+
+        .btn-enviar:active {
+            transform: scale(0.98);
+        }
+
+        .registro-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+
+        .registro-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            font-size: 12px;
+            color: #888;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        td {
+            padding: 12px 0;
+            font-size: 14px;
+            border-bottom: 1px solid #f9f9f9;
+        }
+
+        .btn-clear {
+            background: #fff0f0;
+            color: #ff4757;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>Generar Pago Móvil</h2>
+    <h2>Generador de Pago</h2>
     
-    <label>Nombre del Cliente:</label>
-    <input type="text" id="nombre" placeholder="Nombre completo">
-
-    <label>Monto (Bs):</label>
-    <input type="number" id="monto" placeholder="0.00" step="0.01">
-
-    <label>Teléfono del Cliente:</label>
     <div class="input-group">
-        <input type="tel" id="telefono" placeholder="04121234567">
-        <button class="btn-lupa" onclick="seleccionarContacto()">🔍</button>
+        <label>Nombre del Cliente</label>
+        <input type="text" id="nombre" placeholder="Juan Pérez">
     </div>
 
-    <button class="btn-enviar" onclick="procesarPago()">ENVIAR POR WHATSAPP</button>
+    <div class="input-group">
+        <label>Monto a Cobrar (Bs)</label>
+        <input type="number" id="monto" placeholder="0.00" step="0.01">
+    </div>
+
+    <div class="input-group">
+        <label>Teléfono del Cliente</label>
+        <div class="phone-container">
+            <input type="tel" id="telefono" placeholder="04121234567">
+            <button class="btn-lupa" onclick="abrirContactos()" title="Seleccionar de Android">🔍</button>
+        </div>
+    </div>
+
+    <button class="btn-enviar" onclick="enviarPago()">ENVIAR A WHATSAPP BUSINESS</button>
 </div>
 
 <div class="registro-container">
-    <div class="header-registro">
-        <h3 style="margin:0; font-size: 16px; color: var(--business);">Registro de Cobros</h3>
-        <button class="btn-borrar" onclick="limpiarHistorial()">Limpiar Todo</button>
+    <div class="registro-header">
+        <h3 style="margin:0; font-size: 16px; color: var(--primary);">Historial de Cobros</h3>
+        <button class="btn-clear" onclick="limpiarHistorial()">Borrar todo</button>
     </div>
     <table>
         <thead>
             <tr>
-                <th>Nombre</th>
+                <th>Cliente</th>
                 <th>Monto</th>
                 <th>Teléfono</th>
             </tr>
         </thead>
-        <tbody id="listaRegistros"></tbody>
+        <tbody id="tablaCuerpo"></tbody>
     </table>
 </div>
 
 <script>
-    // Cargar historial al iniciar
-    document.addEventListener('DOMContentLoaded', cargarHistorial);
+    // Al cargar la página, mostrar historial guardado
+    document.addEventListener('DOMContentLoaded', mostrarHistorial);
 
-    async function seleccionarContacto() {
+    async function abrirContactos() {
+        const props = ['name', 'tel'];
+        const opts = { multiple: false };
+
         if (!('contacts' in navigator && 'select' in navigator.contacts)) {
-            alert("Brave o tu navegador actual bloquea el acceso a contactos por privacidad. Por favor, usa Chrome para esta función o ingresa el número manualmente.");
+            alert("Acceso a contactos no disponible. \n\nRecuerda:\n1. Usar Chrome en Android.\n2. La página debe ser HTTPS.");
             return;
         }
 
         try {
-            const props = ['name', 'tel'];
-            const contact = await navigator.contacts.select(props, { multiple: false });
+            const contact = await navigator.contacts.select(props, opts);
             if (contact.length > 0) {
-                document.getElementById('nombre').value = contact[0].name[0] || '';
-                document.getElementById('telefono').value = contact[0].tel[0].replace(/\s/g, '');
+                const nombre = contact[0].name ? contact[0].name[0] : "";
+                const tel = contact[0].tel ? contact[0].tel[0].replace(/\s/g, '') : "";
+                
+                document.getElementById('nombre').value = nombre;
+                document.getElementById('telefono').value = tel;
             }
         } catch (err) {
-            console.log("Acceso a contactos denegado.");
+            console.error("Error al seleccionar contacto:", err);
         }
     }
 
-    function procesarPago() {
+    function enviarPago() {
         const nombre = document.getElementById('nombre').value;
         const monto = document.getElementById('monto').value;
         let telRaw = document.getElementById('telefono').value.replace(/\D/g, '');
 
         if (!nombre || !monto || !telRaw) {
-            alert("Completa todos los datos.");
+            alert("Por favor completa todos los datos");
             return;
         }
 
-        // Formato internacional
-        let telFull = telRaw.startsWith('0') ? '58' + telRaw.substring(1) : (telRaw.startsWith('58') ? telRaw : '58' + telRaw);
+        // Formato Venezuela 58
+        let telFinal = telRaw;
+        if (telRaw.startsWith('0')) {
+            telFinal = '58' + telRaw.substring(1);
+        } else if (!telRaw.startsWith('58')) {
+            telFinal = '58' + telRaw;
+        }
 
-        const urlPagoBDV = `https://bdvdigital.banvenez.com/pagomovil?id=V19978103&phone=584124645195&bank=0102&description=9dxBliWt4XnVSB0LTqNasQ%3D%3D&amount=${monto}`;
-        const mensaje = `Hola ${nombre}, aquí tienes el enlace para tu pago móvil por ${monto} Bs:\n\n${urlPagoBDV}`;
+        // URL proporcionada
+        const bdvLink = `https://bdvdigital.banvenez.com/pagomovil?id=V19978103&phone=584124645195&bank=0102&description=9dxBliWt4XnVSB0LTqNasQ%3D%3D&amount=${monto}`;
         
-        guardarEnHistorial(nombre, monto, telFull);
-        window.open(`https://wa.me/${telFull}?text=${encodeURIComponent(mensaje)}`, '_blank');
+        const mensaje = encodeURIComponent(`Hola ${nombre}, aquí tienes el enlace para realizar el pago móvil por un monto de ${monto} Bs:\n\n${bdvLink}`);
+        
+        // Guardar y abrir
+        guardarCobro(nombre, monto, telFinal);
+        window.open(`https://wa.me/${telFinal}?text=${mensaje}`, '_blank');
 
-        // Limpiar campos
+        // Limpiar para el siguiente
         document.getElementById('nombre').value = '';
         document.getElementById('monto').value = '';
         document.getElementById('telefono').value = '';
     }
 
-    function guardarEnHistorial(nombre, monto, telefono) {
-        const registro = { nombre, monto, telefono };
-        let historial = JSON.parse(localStorage.getItem('cobros_fanto')) || [];
-        historial.unshift(registro);
-        localStorage.setItem('cobros_fanto', JSON.stringify(historial.slice(0, 20))); // Guarda los últimos 20
-        renderizarTabla();
+    function guardarCobro(nombre, monto, telefono) {
+        let historial = JSON.parse(localStorage.getItem('fanto_cobros')) || [];
+        historial.unshift({ nombre, monto, telefono });
+        localStorage.setItem('fanto_cobros', JSON.stringify(historial.slice(0, 15))); // Guardar últimos 15
+        mostrarHistorial();
     }
 
-    function cargarHistorial() {
-        renderizarTabla();
-    }
-
-    function renderizarTabla() {
-        const tabla = document.getElementById('listaRegistros');
-        const historial = JSON.parse(localStorage.getItem('cobros_fanto')) || [];
+    function mostrarHistorial() {
+        const tabla = document.getElementById('tablaCuerpo');
+        const historial = JSON.parse(localStorage.getItem('fanto_cobros')) || [];
+        
         tabla.innerHTML = historial.map(c => `
             <tr>
                 <td>${c.nombre}</td>
@@ -134,9 +276,9 @@
     }
 
     function limpiarHistorial() {
-        if(confirm("¿Borrar todo el historial?")) {
-            localStorage.removeItem('cobros_fanto');
-            renderizarTabla();
+        if (confirm("¿Seguro que deseas borrar el historial?")) {
+            localStorage.removeItem('fanto_cobros');
+            mostrarHistorial();
         }
     }
 </script>
