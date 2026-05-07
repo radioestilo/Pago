@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Pago Business</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 450px; margin-bottom: 20px; }
+        h2 { color: #075e54; margin-top: 0; text-align: center; }
+        label { display: block; margin: 10px 0 5px; font-weight: bold; font-size: 14px; }
+        .input-group { display: flex; gap: 8px; margin-bottom: 15px; }
+        input { flex-grow: 1; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+        .btn-lupa { background: #007bff; color: white; border: none; border-radius: 8px; padding: 0 15px; cursor: pointer; font-size: 20px; display: flex; align-items: center; }
+        .btn-enviar { width: 100%; padding: 15px; background-color: #128c7e; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        
+        .registro-container { width: 100%; max-width: 450px; background: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { background: #f8f9fa; text-align: left; padding: 10px; border-bottom: 2px solid #eee; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+        .empty-msg { text-align: center; color: #888; padding: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Generar Pago</h2>
+    
+    <label>Nombre del Cliente:</label>
+    <input type="text" id="nombre" placeholder="Nombre completo">
+
+    <label>Monto (Bs):</label>
+    <input type="number" id="monto" placeholder="0.00" step="0.01">
+
+    <label>Teléfono del Cliente:</label>
+    <div class="input-group">
+        <input type="tel" id="telefono" placeholder="Ej: 04121234567">
+        <button class="btn-lupa" onclick="seleccionarContacto()" title="Buscar en contactos">🔍</button>
+    </div>
+
+    <button class="btn-enviar" onclick="procesarPago()">ENVIAR POR WHATSAPP</button>
+</div>
+
+<div class="registro-container">
+    <h3 style="margin-top:0; font-size: 16px;">Registro de Cobros</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Monto</th>
+                <th>Teléfono</th>
+            </tr>
+        </thead>
+        <tbody id="listaRegistros">
+            <!-- Aquí se cargarán los cobros -->
+        </tbody>
+    </table>
+    <div id="mensajeVacio" class="empty-msg">No hay cobros registrados hoy</div>
+</div>
+
+<script>
+    // Función para abrir contactos de Android
+    async function seleccionarContacto() {
+        const props = ['name', 'tel'];
+        const opts = { multiple: false };
+
+        try {
+            if (!('contacts' in navigator && 'select' in navigator.contacts)) {
+                alert("Tu navegador no soporta la selección de contactos. Intenta en Chrome para Android.");
+                return;
+            }
+
+            const contact = await navigator.contacts.select(props, opts);
+            
+            if (contact.length > 0) {
+                const nombreSel = contact[0].name[0];
+                const telSel = contact[0].tel[0].replace(/\s/g, ''); // Quitar espacios
+                
+                document.getElementById('nombre').value = nombreSel;
+                document.getElementById('telefono').value = telSel;
+            }
+        } catch (ex) {
+            console.log("Cancelado o error: ", ex);
+        }
+    }
+
+    function procesarPago() {
+        const nombre = document.getElementById('nombre').value;
+        const monto = document.getElementById('monto').value;
+        let telefono = document.getElementById('telefono').value.replace(/\D/g, '');
+
+        if (!nombre || !monto || !telefono) {
+            alert("Por favor, completa todos los campos.");
+            return;
+        }
+
+        // Formatear teléfono para el link
+        if (telefono.startsWith('0')) {
+            telefono = '58' + telefono.substring(1);
+        } else if (!telefono.startsWith('58')) {
+            telefono = '58' + telefono;
+        }
+
+        // Generar enlace BDV
+        const urlPagoBDV = `https://bdvdigital.banvenez.com/pagomovil?id=V19978103&phone=584124645195&bank=0102&description=9dxBliWt4XnVSB0LTqNasQ%3D%3D&amount=${monto}`;
+        
+        const mensaje = encodeURIComponent(`Hola ${nombre}, aquí tienes el enlace para tu pago móvil por ${monto} Bs:\n\n${urlPagoBDV}`);
+        
+        // Registrar en la tabla
+        agregarATabla(nombre, monto, telefono);
+
+        // Abrir WhatsApp
+        window.open(`https://wa.me/${telefono}?text=${mensaje}`, '_blank');
+    }
+
+    function agregarATabla(nombre, monto, telefono) {
+        const tabla = document.getElementById('listaRegistros');
+        document.getElementById('mensajeVacio').style.display = 'none';
+
+        const fila = document.createElement('tr');
+        fila.innerHTML = `
+            <td>${nombre}</td>
+            <td>${monto} Bs</td>
+            <td>${telefono}</td>
+        `;
+        
+        // Insertar al principio de la lista
+        tabla.insertBefore(fila, tabla.firstChild);
+
+        // Limpiar campos después de enviar
+        document.getElementById('nombre').value = '';
+        document.getElementById('monto').value = '';
+        document.getElementById('telefono').value = '';
+    }
+</script>
+
+</body>
+</html>
